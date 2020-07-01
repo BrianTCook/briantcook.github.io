@@ -1,1 +1,359 @@
-Hello world
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Brian T. Cook</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+							<span class="icon fa-moon"></span>
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1>Brian T. Cook</h1>
+								<p>Astrophysicist, Leiden Observatory</p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="#about">About</a></li>
+								<li><a href="#research">Research</a></li>
+								<li><a href="#CV">CV</a></li>
+								<li><a href="#contact">Contact</a></li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Intro -->
+							<article id="about">
+								<h2 class="major">About</h2>
+								<span class="image main"><img src="images/20180817_134155.jpg" alt="" /></span>
+								<p> Welcome! My name is Brian Cook, and I am currently a second-year master's student focusing on astronomy research at the Leiden Observatory in the Netherlands.</p> <p>I grew up in Grandville and on Barlow Lake in west Michigan. I spent my college years in nearby Ann Arbor, where I earned a Bachelor of Science (physics and astronomy) from the University of Michigan. After one year in Atlanta, where I earned a Master of Science (physics) from the Georgia Institute of Technology, I moved across the Atlantic to pursue my research interests in astronomy. I will be returning to Georgia Tech this summer intent on earning a PhD in physics.</p><p>In my spare time I enjoy reading, running (especially in the fall), watching movies, and travelling. I have tried to get involved in science communication through social media, and I recently wrote <a href="http://www.thepromptmag.com/how-are-galaxies-formed-an-explainer">an article</a> describing how galaxies form.</p>
+							</article>
+
+						<!-- Work -->
+							<article id="research">
+								<h2 class="major">Research</h2>
+								<span class="image main"><img src="https://home.strw.leidenuniv.nl/~cook/milky-way-2695569_1920.jpg" alt="" /></span>
+
+								<p> I briefly describe my previous research experience (and give a broad introduction to each topic) here. Generally speaking, I have experience in cosmological simulation post-processing, big data analysis as it pertains to astronomy, and theoretical physics research. </p>
+
+								<h3>Galactic Archaeology</h2>
+								<p>Galactic archaeology is the branch of research devoted to determining the formation history of the Milky Way. Galaxies form in what is known as a hierarchical process; smaller galaxies are accreted by larger galaxies, which in turn causes the larger one to grow. As the smaller galaxy is tidally stripped, it leaves behind signatures in the form of objects like stellar streams and globular clusters.</p>
+								<p>As a summer intern at MIT Lincoln Lab, I compiled a catalog of RR Lyrae variable stars from several time-domain surveys such that we could conduct an archaeological dig of our own. It is comparatively easy to compute the distance to a RR Lyrae variable, and these stars are associated with objects like globular clusters and old stellar streams. From this three-dimensional map of RR Lyrae variables, we were able to find regions in the all-sky plane where many such galaxy merger event artifiacts can be found; to do so, we used an unsupervised data mining method called <a href="https://medium.com/swlh/what-is-hierarchical-clustering-c04e9972e002">hierarchical clustering</a>.</p>
+								<p>Right now I am using the <a href="https://github.com/amusecode/amuse">AMUSE environment</a>, and more specifically a bridged direct N-body and Barnes-Hut octree gravity solver called Nemesis, to analyze how the phase space volume of star clusters (and related properties like information entropy) are affected by the background galaxy and interactions with nearby star clusters. This treatment will be important in understanding the morphology of galaxy merger remnants, such that they can be more easily detected while looking through large surveys like the LSST, Gaia, or WFIRST.
+								<h3>Large-scale Structure Simulations and the Circumgalactic Medium</h3>
+								<p>It is theorized that during a period of rapid inflation after the Big Bang, small quantum fluctuations were forced onto macroscopic scales. Cosmologists can use observations of the cosmic microwave background to map these overdense anisotropies in the Universe, in addition to determining the abundances of things like baryonic matter and dark energy. With this set of initial conditions, a wide set of cosmological simulations have been developed.</p><p>These simulation suites are comprised of state-of-the-art algorithms that treat astrophysical phenomena operating on different length and time scales simultaneously. The outputs can then be analyzed to test the effects of underlying physics theories (e.g., star formation or AGN feedback) on observables. While at Georgia Tech, I worked with a formulation for solving the Navier-Stokes equation called the <a href="http://www.scholarpedia.org/article/Lattice_Boltzmann_Method">Lattice Boltzmann Method</a>; I am eager to see if a gravity code could be retrofitted to this lattice such that a simulation suite could be built using a solver optimized for GPUs, a popular piece of hardware suitable for parallel programming.<p>
+								
+								<p>During my first year in Leiden, I analyzed low-mass, star-forming galaxies produced by the <a href="http://eagle.strw.leidenuniv.nl/">EAGLE simulations</a>. My <a href="https://home.strw.leidenuniv.nl/~cook/btcook_first_master_project.pdf">project</a> presents an analysis of the circumgalactic medium (CGM) of these galaxies; often defined as the material gravitationally bound to the galaxy but outside of the disk, the CGM is critical to understanding galaxy formation and evolution.</p>
+								<h3>Gravitational Collapse in anti-de Sitter Space</h3>
+								<p>The AdS/CFT correspondence, where field theories on the boundary of a negatively-curved space are directly related to gravity theories in the bulk (volume contained within the boundary), is a topic that garners wide interest in the theoretical physics community. The gravitational collapse of a massless scalar field in the bulk would indicate that the fields on the boundary have come into thermal equilibrium; finding this collapse with Einstein's equations is possible but computationally expensive. My <a href="https://home.strw.leidenuniv.nl/~cook/btcook_honors_thesis.pdf">bachelor thesis</a> was devoted to rederiving a differential equation where, once the principles of wave turbulence are incorporated, the evolution of the scalar field is truncated by increasingly complicated wave mode interactions.</p>
+<p>I am currently developing a Cython script that solves this highly nonlinear differential equation such that collapse of the scalar field can be detected.</p>
+								<h3>Star and Planet Formation</h3>
+								<p>Stars form when dense cores of molecular clouds collapse; this occurs when the self-gravitation of these cores overwhelms support mechanisms like pressure. The youngest protostars often have a disk surrounding them, and the disk/protostar pair work together to create a bipolar outflow which illuminates the surrounding envelope. This illumination, called the scattered light nebula, can be used to infer properties of the disk/protostar system. In <a href="https://www.aanda.org/component/article?access=doi&doi=10.1051/0004-6361/201935419">A&A 626, A51</a>, we show that the scattered light nebula of L1527 IRS, a Class 0/I protostar in the neighborhood of the Taurus constellation, can be qualitatively reproduced through simulations if the disk has a pronounced warp.</p>
+								<p>It is from these disks that planets eventually emerge. I spent a semester as an undergrad at Michigan working with a set of N-body codes to explore how planets interact with the protoplanetary disk. Some planets will drift inwards after losing angular momentum from prolonged tidal interactions with the disk; this may explain why we find so many massive planets very close to their host star. (It is worth noting that this class of planets are also the easiest to detect.)
+							</article>
+
+						<!-- About -->
+							<article id="CV">
+								<h2 class="major">CV</h2>
+								<p><a href="https://home.strw.leidenuniv.nl/~cook/btcook_cv.pdf">Curriculum Vitae.</a>
+</p>
+							</article>
+
+						<!-- Contact -->
+							<article id="contact">
+								<h2 class="major">Contact</h2>
+
+								<p>I can be reached by e-mail (btcook@umich.edu, cook@strw.leidenuniv.nl).</p>
+
+								<h3>Links</h3>
+
+								<p>
+								<a href="https://www.linkedin.com/in/brian-c-36267087/">LinkedIn</a>, 
+								<a href="https://github.com/briantcook">GitHub</a>, 
+								<a href="https://scholar.google.com/citations?user=ixSSy6sAAAAJ&hl=en">Google Scholar</a>.
+								</p>
+
+							</article>			
+
+						<!-- Elements -->
+							<article id="elements">
+								<h2 class="major">Elements</h2>
+
+								<section>
+									<h3 class="major">Text</h3>
+									<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is <em>emphasized</em>.
+									This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+									This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a href="#">this is a link</a>.</p>
+									<hr />
+									<h2>Heading Level 2</h2>
+									<h3>Heading Level 3</h3>
+									<h4>Heading Level 4</h4>
+									<h5>Heading Level 5</h5>
+									<h6>Heading Level 6</h6>
+									<hr />
+									<h4>Blockquote</h4>
+									<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+									<h4>Preformatted</h4>
+									<pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+    print 'Iteration ' + i;
+    deck.shuffle();
+    i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
+								</section>
+
+								<section>
+									<h3 class="major">Lists</h3>
+
+									<h4>Unordered</h4>
+									<ul>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Alternate</h4>
+									<ul class="alt">
+										<li>Dolor pulvinar etiam.</li>
+										<li>Sagittis adipiscing.</li>
+										<li>Felis enim feugiat.</li>
+									</ul>
+
+									<h4>Ordered</h4>
+									<ol>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis viverra.</li>
+										<li>Felis enim feugiat.</li>
+										<li>Dolor pulvinar etiam.</li>
+										<li>Etiam vel felis lorem.</li>
+										<li>Felis enim et feugiat.</li>
+									</ol>
+									<h4>Icons</h4>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+									</ul>
+
+									<h4>Actions</h4>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions stacked">
+										<li><a href="#" class="button primary">Default</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+								</section>
+
+								<section>
+									<h3 class="major">Table</h3>
+									<h4>Default</h4>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+
+									<h4>Alternate</h4>
+									<div class="table-wrapper">
+										<table class="alt">
+											<thead>
+												<tr>
+													<th>Name</th>
+													<th>Description</th>
+													<th>Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Item One</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Two</td>
+													<td>Vis ac commodo adipiscing arcu aliquet.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Three</td>
+													<td> Morbi faucibus arcu accumsan lorem.</td>
+													<td>29.99</td>
+												</tr>
+												<tr>
+													<td>Item Four</td>
+													<td>Vitae integer tempus condimentum.</td>
+													<td>19.99</td>
+												</tr>
+												<tr>
+													<td>Item Five</td>
+													<td>Ante turpis integer aliquet porttitor.</td>
+													<td>29.99</td>
+												</tr>
+											</tbody>
+											<tfoot>
+												<tr>
+													<td colspan="2"></td>
+													<td>100.00</td>
+												</tr>
+											</tfoot>
+										</table>
+									</div>
+								</section>
+
+								<section>
+									<h3 class="major">Buttons</h3>
+									<ul class="actions">
+										<li><a href="#" class="button primary">Primary</a></li>
+										<li><a href="#" class="button">Default</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button">Default</a></li>
+										<li><a href="#" class="button small">Small</a></li>
+									</ul>
+									<ul class="actions">
+										<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+										<li><a href="#" class="button icon solid fa-download">Icon</a></li>
+									</ul>
+									<ul class="actions">
+										<li><span class="button primary disabled">Disabled</span></li>
+										<li><span class="button disabled">Disabled</span></li>
+									</ul>
+								</section>
+
+								<section>
+									<h3 class="major">Form</h3>
+									<form method="post" action="#">
+										<div class="fields">
+											<div class="field half">
+												<label for="demo-name">Name</label>
+												<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+											</div>
+											<div class="field half">
+												<label for="demo-email">Email</label>
+												<input type="email" name="demo-email" id="demo-email" value="" placeholder="jane@untitled.tld" />
+											</div>
+											<div class="field">
+												<label for="demo-category">Category</label>
+												<select name="demo-category" id="demo-category">
+													<option value="">-</option>
+													<option value="1">Manufacturing</option>
+													<option value="1">Shipping</option>
+													<option value="1">Administration</option>
+													<option value="1">Human Resources</option>
+												</select>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-low" name="demo-priority" checked>
+												<label for="demo-priority-low">Low</label>
+											</div>
+											<div class="field half">
+												<input type="radio" id="demo-priority-high" name="demo-priority">
+												<label for="demo-priority-high">High</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-copy" name="demo-copy">
+												<label for="demo-copy">Email me a copy</label>
+											</div>
+											<div class="field half">
+												<input type="checkbox" id="demo-human" name="demo-human" checked>
+												<label for="demo-human">Not a robot</label>
+											</div>
+											<div class="field">
+												<label for="demo-message">Message</label>
+												<textarea name="demo-message" id="demo-message" placeholder="Enter your message" rows="6"></textarea>
+											</div>
+										</div>
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" class="primary" /></li>
+											<li><input type="reset" value="Reset" /></li>
+										</ul>
+									</form>
+								</section>
+
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
