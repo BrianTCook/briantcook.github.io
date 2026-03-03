@@ -1,409 +1,579 @@
 <!DOCTYPE HTML>
-<!--
-	Dimension by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-
+<html lang="en">
 <head>
 	<title>Brian T. Cook</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript>
-		<link rel="stylesheet" href="assets/css/noscript.css" />
-	</noscript>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+	<style>
+		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+		:root {
+			--bg: #06080f;
+			--bg2: #090c17;
+			--surface: rgba(255,255,255,0.03);
+			--border: rgba(255,255,255,0.07);
+			--text: #c8cfe0;
+			--text-dim: #5a6480;
+			--accent: #8eb4e3;
+			--accent2: #c9a96e;
+			--white: #eef2fb;
+			--font-serif: 'Cormorant Garamond', Georgia, serif;
+			--font-mono: 'DM Mono', monospace;
+		}
+
+		html { scroll-behavior: smooth; }
+
+		body {
+			background: var(--bg);
+			color: var(--text);
+			font-family: var(--font-serif);
+			font-size: 18px;
+			line-height: 1.75;
+			min-height: 100vh;
+			overflow-x: hidden;
+		}
+
+		/* ── Starfield canvas ── */
+		#starfield {
+			position: fixed;
+			inset: 0;
+			z-index: 0;
+			pointer-events: none;
+		}
+
+		/* ── Layout ── */
+		#wrapper {
+			position: relative;
+			z-index: 1;
+			display: grid;
+			grid-template-columns: 300px 1fr;
+			min-height: 100vh;
+		}
+
+		/* ── Sidebar ── */
+		#sidebar {
+			position: sticky;
+			top: 0;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			padding: 4rem 2.5rem;
+			border-right: 1px solid var(--border);
+			background: linear-gradient(180deg, rgba(10,14,28,0.9) 0%, rgba(6,8,15,0.95) 100%);
+		}
+
+		.sidebar-top {}
+
+		.monogram {
+			width: 52px;
+			height: 52px;
+			border: 1px solid var(--accent);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: var(--font-mono);
+			font-size: 0.7rem;
+			color: var(--accent);
+			letter-spacing: 0.05em;
+			margin-bottom: 2.5rem;
+		}
+
+		.sidebar-name {
+			font-size: 1.55rem;
+			font-weight: 300;
+			color: var(--white);
+			line-height: 1.2;
+			letter-spacing: 0.01em;
+			margin-bottom: 0.4rem;
+		}
+
+		.sidebar-title {
+			font-family: var(--font-mono);
+			font-size: 0.65rem;
+			color: var(--accent2);
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			margin-bottom: 3rem;
+		}
+
+		nav ul {
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 0.2rem;
+		}
+
+		nav ul li a {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			color: var(--text-dim);
+			text-decoration: none;
+			font-family: var(--font-mono);
+			font-size: 0.7rem;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			padding: 0.55rem 0;
+			transition: color 0.2s;
+			position: relative;
+		}
+
+		nav ul li a::before {
+			content: '';
+			display: block;
+			width: 20px;
+			height: 1px;
+			background: currentColor;
+			transition: width 0.25s;
+			flex-shrink: 0;
+		}
+
+		nav ul li a:hover,
+		nav ul li a.active {
+			color: var(--accent);
+		}
+
+		nav ul li a:hover::before,
+		nav ul li a.active::before {
+			width: 36px;
+		}
+
+		.sidebar-bottom {
+			font-family: var(--font-mono);
+			font-size: 0.6rem;
+			color: var(--text-dim);
+			letter-spacing: 0.08em;
+		}
+
+		/* ── Main content ── */
+		#main {
+			padding: 0;
+		}
+
+		/* ── Sections ── */
+		.section {
+			min-height: 100vh;
+			padding: 5rem 5rem 5rem 4rem;
+			border-bottom: 1px solid var(--border);
+			opacity: 0;
+			transform: translateY(24px);
+			transition: opacity 0.7s ease, transform 0.7s ease;
+		}
+
+		.section.visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		.section-label {
+			font-family: var(--font-mono);
+			font-size: 0.6rem;
+			color: var(--accent2);
+			letter-spacing: 0.2em;
+			text-transform: uppercase;
+			margin-bottom: 0.75rem;
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		.section-label::after {
+			content: '';
+			flex: 1;
+			height: 1px;
+			background: var(--border);
+			max-width: 80px;
+		}
+
+		h2.section-title {
+			font-size: 3.5rem;
+			font-weight: 300;
+			color: var(--white);
+			line-height: 1.05;
+			letter-spacing: -0.01em;
+			margin-bottom: 2.5rem;
+		}
+
+		h3.subsection {
+			font-size: 1.35rem;
+			font-weight: 400;
+			font-style: italic;
+			color: var(--white);
+			margin: 2.5rem 0 0.75rem;
+			padding-bottom: 0.5rem;
+			border-bottom: 1px solid var(--border);
+		}
+
+		p {
+			color: var(--text);
+			max-width: 65ch;
+			margin-bottom: 1.25rem;
+		}
+
+		a {
+			color: var(--accent);
+			text-decoration: none;
+			border-bottom: 1px solid rgba(142,180,227,0.25);
+			transition: border-color 0.2s, color 0.2s;
+		}
+
+		a:hover {
+			color: var(--white);
+			border-color: var(--accent);
+		}
+
+		/* ── About section specifics ── */
+		.about-grid {
+			display: grid;
+			grid-template-columns: 1fr 280px;
+			gap: 4rem;
+			align-items: start;
+		}
+
+		.portrait-wrap {
+			position: relative;
+		}
+
+		.portrait-wrap img {
+			width: 100%;
+			aspect-ratio: 3/4;
+			object-fit: cover;
+			display: block;
+			filter: grayscale(20%) contrast(1.05);
+		}
+
+		.portrait-wrap::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border: 1px solid var(--border);
+			pointer-events: none;
+		}
+
+		.portrait-caption {
+			font-family: var(--font-mono);
+			font-size: 0.6rem;
+			color: var(--text-dim);
+			letter-spacing: 0.1em;
+			margin-top: 0.75rem;
+		}
+
+		/* ── Research cards ── */
+		.research-items {
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+		}
+
+		.research-item {
+			padding: 2rem 0;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.research-item:last-child { border-bottom: none; }
+
+		.research-num {
+			font-family: var(--font-mono);
+			font-size: 0.6rem;
+			color: var(--text-dim);
+			letter-spacing: 0.15em;
+			margin-bottom: 0.5rem;
+		}
+
+		.research-item h3 {
+			font-size: 1.4rem;
+			font-weight: 300;
+			font-style: italic;
+			color: var(--white);
+			margin-bottom: 0.75rem;
+		}
+
+		/* ── CV section ── */
+		.cv-link-wrap {
+			display: inline-flex;
+			align-items: center;
+			gap: 1rem;
+			border: 1px solid var(--border);
+			padding: 1.25rem 2rem;
+			color: var(--white);
+			text-decoration: none;
+			border-bottom: 1px solid var(--border);
+			font-family: var(--font-mono);
+			font-size: 0.75rem;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			transition: background 0.2s, border-color 0.2s;
+			margin-top: 1rem;
+		}
+
+		.cv-link-wrap:hover {
+			background: var(--surface);
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		.cv-arrow {
+			font-size: 1.2rem;
+			line-height: 1;
+		}
+
+		/* ── Contact ── */
+		.contact-email {
+			font-size: 1.5rem;
+			font-weight: 300;
+			color: var(--white);
+			font-style: italic;
+			margin-bottom: 2.5rem;
+			border-bottom: none;
+		}
+
+		.contact-email:hover {
+			color: var(--accent);
+			border-bottom: none;
+		}
+
+		.links-row {
+			display: flex;
+			gap: 1.5rem;
+			flex-wrap: wrap;
+		}
+
+		.link-chip {
+			font-family: var(--font-mono);
+			font-size: 0.65rem;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			padding: 0.5rem 1rem;
+			border: 1px solid var(--border);
+			color: var(--text-dim);
+			text-decoration: none;
+			border-bottom: 1px solid var(--border);
+			transition: border-color 0.2s, color 0.2s;
+		}
+
+		.link-chip:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		/* ── Footer ── */
+		footer {
+			padding: 2rem 4rem;
+			font-family: var(--font-mono);
+			font-size: 0.6rem;
+			color: var(--text-dim);
+			letter-spacing: 0.08em;
+			border-top: 1px solid var(--border);
+		}
+
+		footer a { color: var(--text-dim); border-bottom: none; }
+		footer a:hover { color: var(--accent); }
+
+		/* ── Responsive ── */
+		@media (max-width: 900px) {
+			#wrapper { grid-template-columns: 1fr; }
+
+			#sidebar {
+				position: relative;
+				height: auto;
+				padding: 2.5rem 2rem;
+				border-right: none;
+				border-bottom: 1px solid var(--border);
+			}
+
+			nav ul { flex-direction: row; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+			nav ul li a::before { display: none; }
+
+			.section { padding: 3rem 2rem; }
+
+			.about-grid { grid-template-columns: 1fr; }
+			.portrait-wrap { max-width: 260px; }
+
+			h2.section-title { font-size: 2.5rem; }
+
+			footer { padding: 1.5rem 2rem; }
+		}
+	</style>
 </head>
+<body>
 
-<body class="is-preload">
+<canvas id="starfield"></canvas>
 
-	<!-- Wrapper -->
-	<div id="wrapper">
+<div id="wrapper">
 
-		<!-- Header -->
-		<header id="header">
-			<div class="logo">
-				<span class="icon fa-moon"></span>
-			</div>
-			<div class="content">
-				<div class="inner">
-					<h1>Brian T. Cook</h1>
-					<p>Astrophysicist</p>
-				</div>
-			</div>
+	<!-- Sidebar -->
+	<aside id="sidebar">
+		<div class="sidebar-top">
+			<div class="monogram">BTC</div>
+			<div class="sidebar-name">Brian T. Cook</div>
+			<div class="sidebar-title">Astrophysicist</div>
 			<nav>
 				<ul>
 					<li><a href="#about">About</a></li>
 					<li><a href="#research">Research</a></li>
-					<li><a href="#CV">CV</a></li>
+					<li><a href="#cv">CV</a></li>
 					<li><a href="#contact">Contact</a></li>
 				</ul>
 			</nav>
-		</header>
-
-		<!-- Main -->
-		<div id="main">
-
-			<!-- Intro -->
-			<article id="about">
-				<h2 class="major">About</h2>
-				<span class="image main"><img src="images/IMG_6341.jpg" alt="" /></span>
-				<p>Welcome! My name is Brian Cook; I am working on my PhD in astrophysics at the University of North
-					Carolina at Chapel Hill. Generally speaking, I am interested in dense star clusters, Galactic archaeology, and near-field cosmology. 
-					Before coming to Carolina, I received my BS in astrophysics from the University of Michigan
-					and my MSc in astronomy from the Sterrewacht in Leiden. You can learn more about my research interests elsewhere on this site.
-				</p>					
-			</article>
-
-			<!-- Work -->
-			<article id="research">
-				<h2 class="major">Research</h2>
-				<span class="image main"><img src="https://home.strw.leidenuniv.nl/~cook/milky-way-2695569_1920.jpg"
-						alt="" /></span>
-
-				<p> I briefly describe my previous research experience (and give a broad introduction to each topic)
-					here.
-
-				<h3><i>N</i>-body solvers and Star Clusters</h3>
-				<p>There are a variety of ways to simulate self-gravitating systems, and globular clusters 
-					push the boundaries of what can be done computationally. Brute-force, <i>O(N^2)</i> approaches take many 
-					months to complete on a supercomputer due to the dramatically varying spatiotemporal scales present in 
-					the resolution of the underlying dynamics. I led the development of <b>KRIOS</b> (<a
-					href="https://iopscience.iop.org/article/10.3847/1538-4357/ae0478">first code paper here</a>), a new basis-expansion <i>N</i>-body code 
-					specifically designed for modeling globular clusters where the spherical symmetry might be broken (e.g., rotation or tides).
-				    KRIOS can act as an intermediary 
-					between direct <i>N</i>-body and particle-spray codes for the modeling of stellar streams as well; the paper detailing our findings has been
-					submitted to ApJ and <a
-					href="https://arxiv.org/abs/2602.13385">a preprint is available on the arXiv</a>.
-				</p>
-
-				<h3>Galactic Archaeology</h3>
-				<p>Galactic archaeology is the branch of research devoted to determining the formation history of the
-					Milky Way. Galaxies form in what is known as a hierarchical process; smaller galaxies are accreted
-					by larger galaxies, which in turn causes the larger one to grow. As the smaller galaxy is tidally
-					stripped, it leaves behind signatures in the form of objects like stellar streams and globular
-					clusters.</p>
-				<p>As a summer intern at MIT Lincoln Lab, I developed a routine for identifying substructure in the
-					Milky Way comprised of RR Lyrae variables, a popular standard candle in this context, based on
-					hierarchical clustering. You can learn more about our results in <a
-						href="https://academic.oup.com/mnras/article/513/2/2509/6571255">Cook
-						et al. (2022)</a>. I have been expanding on this effort with the new Gaia DR3 release with an eye 
-						towards a more general identification routine for forthcoming surveys.
-				</p>
-
-				<h3>Near-field Cosmology</h3>
-				<p>It is theorized that during a period of rapid inflation after the Big Bang, small quantum
-					fluctuations were forced onto macroscopic scales. Cosmologists can use observations of the cosmic
-					microwave background to map these overdense anisotropies in the Universe, in addition to determining
-					the abundances of things like baryonic matter and dark energy. With this set of initial conditions,
-					a wide set of cosmological simulations have been developed.</p>
-				<p>These simulation suites are comprised of state-of-the-art algorithms that treat astrophysical
-					phenomena operating on different length and time scales simultaneously. The outputs can then be
-					analyzed to test the effects of underlying physics theories (e.g., AGN feedback, small-scale DM distribution)
-					on observables.
-				<p>
-				<p>During my first year in Leiden, I analyzed low-mass, star-forming galaxies produced by the <a
-						href="http://eagle.strw.leidenuniv.nl/">EAGLE simulations</a>. My <a
-						href="btcook_first_master_project.pdf">first project</a> presents an analysis of the
-					circumgalactic medium (CGM) of these galaxies; often defined as the material gravitationally bound
-					to the galaxy but outside of the disk, the CGM is critical to understanding galaxy formation and
-					evolution.</p>
-
-			</article>
-
-			<!-- About -->
-			<article id="CV">
-				<h2 class="major">CV</h2>
-				<p><a href="btcook_cv.pdf">Curriculum Vitae.</a>
-				</p>
-			</article>
-
-			<!-- Contact -->
-			<article id="contact">
-				<h2 class="major">Contact</h2>
-
-				<p>I can be reached by e-mail (btcook [at] unc.edu).</p>
-
-				<h3>Links</h3>
-
-				<p>
-					<a href="https://www.linkedin.com/in/brian-c-36267087/">LinkedIn</a>,
-					<a href="https://github.com/briantcook">GitHub</a>,
-					<a href="https://scholar.google.com/citations?user=ixSSy6sAAAAJ&hl=en">Google Scholar</a>.
-				</p>
-
-			</article>
-
-			<!-- Elements -->
-			<article id="elements">
-				<h2 class="major">Elements</h2>
-
-				<section>
-					<h3 class="major">Text</h3>
-					<p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is
-						<em>emphasized</em>.
-						This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
-						This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a
-							href="#">this is a link</a>.
-					</p>
-					<hr />
-					<h2>Heading Level 2</h2>
-					<h3>Heading Level 3</h3>
-					<h4>Heading Level 4</h4>
-					<h5>Heading Level 5</h5>
-					<h6>Heading Level 6</h6>
-					<hr />
-					<h4>Blockquote</h4>
-					<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus
-						euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis
-						iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem
-						ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
-					<h4>Preformatted</h4>
-					<pre><code>i = 0;
-
-while (!deck.isInOrder()) {
-    print 'Iteration ' + i;
-    deck.shuffle();
-    i++;
-}
-
-print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
-				</section>
-
-				<section>
-					<h3 class="major">Lists</h3>
-
-					<h4>Unordered</h4>
-					<ul>
-						<li>Dolor pulvinar etiam.</li>
-						<li>Sagittis adipiscing.</li>
-						<li>Felis enim feugiat.</li>
-					</ul>
-
-					<h4>Alternate</h4>
-					<ul class="alt">
-						<li>Dolor pulvinar etiam.</li>
-						<li>Sagittis adipiscing.</li>
-						<li>Felis enim feugiat.</li>
-					</ul>
-
-					<h4>Ordered</h4>
-					<ol>
-						<li>Dolor pulvinar etiam.</li>
-						<li>Etiam vel felis viverra.</li>
-						<li>Felis enim feugiat.</li>
-						<li>Dolor pulvinar etiam.</li>
-						<li>Etiam vel felis lorem.</li>
-						<li>Felis enim et feugiat.</li>
-					</ol>
-					<h4>Icons</h4>
-					<ul class="icons">
-						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-						<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-						<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
-					</ul>
-
-					<h4>Actions</h4>
-					<ul class="actions">
-						<li><a href="#" class="button primary">Default</a></li>
-						<li><a href="#" class="button">Default</a></li>
-					</ul>
-					<ul class="actions stacked">
-						<li><a href="#" class="button primary">Default</a></li>
-						<li><a href="#" class="button">Default</a></li>
-					</ul>
-				</section>
-
-				<section>
-					<h3 class="major">Table</h3>
-					<h4>Default</h4>
-					<div class="table-wrapper">
-						<table>
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Price</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Item One</td>
-									<td>Ante turpis integer aliquet porttitor.</td>
-									<td>29.99</td>
-								</tr>
-								<tr>
-									<td>Item Two</td>
-									<td>Vis ac commodo adipiscing arcu aliquet.</td>
-									<td>19.99</td>
-								</tr>
-								<tr>
-									<td>Item Three</td>
-									<td> Morbi faucibus arcu accumsan lorem.</td>
-									<td>29.99</td>
-								</tr>
-								<tr>
-									<td>Item Four</td>
-									<td>Vitae integer tempus condimentum.</td>
-									<td>19.99</td>
-								</tr>
-								<tr>
-									<td>Item Five</td>
-									<td>Ante turpis integer aliquet porttitor.</td>
-									<td>29.99</td>
-								</tr>
-							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="2"></td>
-									<td>100.00</td>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
-
-					<h4>Alternate</h4>
-					<div class="table-wrapper">
-						<table class="alt">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Price</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Item One</td>
-									<td>Ante turpis integer aliquet porttitor.</td>
-									<td>29.99</td>
-								</tr>
-								<tr>
-									<td>Item Two</td>
-									<td>Vis ac commodo adipiscing arcu aliquet.</td>
-									<td>19.99</td>
-								</tr>
-								<tr>
-									<td>Item Three</td>
-									<td> Morbi faucibus arcu accumsan lorem.</td>
-									<td>29.99</td>
-								</tr>
-								<tr>
-									<td>Item Four</td>
-									<td>Vitae integer tempus condimentum.</td>
-									<td>19.99</td>
-								</tr>
-								<tr>
-									<td>Item Five</td>
-									<td>Ante turpis integer aliquet porttitor.</td>
-									<td>29.99</td>
-								</tr>
-							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="2"></td>
-									<td>100.00</td>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
-				</section>
-
-				<section>
-					<h3 class="major">Buttons</h3>
-					<ul class="actions">
-						<li><a href="#" class="button primary">Primary</a></li>
-						<li><a href="#" class="button">Default</a></li>
-					</ul>
-					<ul class="actions">
-						<li><a href="#" class="button">Default</a></li>
-						<li><a href="#" class="button small">Small</a></li>
-					</ul>
-					<ul class="actions">
-						<li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
-						<li><a href="#" class="button icon solid fa-download">Icon</a></li>
-					</ul>
-					<ul class="actions">
-						<li><span class="button primary disabled">Disabled</span></li>
-						<li><span class="button disabled">Disabled</span></li>
-					</ul>
-				</section>
-
-				<section>
-					<h3 class="major">Form</h3>
-					<form method="post" action="#">
-						<div class="fields">
-							<div class="field half">
-								<label for="demo-name">Name</label>
-								<input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
-							</div>
-							<div class="field half">
-								<label for="demo-email">Email</label>
-								<input type="email" name="demo-email" id="demo-email" value=""
-									placeholder="jane@untitled.tld" />
-							</div>
-							<div class="field">
-								<label for="demo-category">Category</label>
-								<select name="demo-category" id="demo-category">
-									<option value="">-</option>
-									<option value="1">Manufacturing</option>
-									<option value="1">Shipping</option>
-									<option value="1">Administration</option>
-									<option value="1">Human Resources</option>
-								</select>
-							</div>
-							<div class="field half">
-								<input type="radio" id="demo-priority-low" name="demo-priority" checked>
-								<label for="demo-priority-low">Low</label>
-							</div>
-							<div class="field half">
-								<input type="radio" id="demo-priority-high" name="demo-priority">
-								<label for="demo-priority-high">High</label>
-							</div>
-							<div class="field half">
-								<input type="checkbox" id="demo-copy" name="demo-copy">
-								<label for="demo-copy">Email me a copy</label>
-							</div>
-							<div class="field half">
-								<input type="checkbox" id="demo-human" name="demo-human" checked>
-								<label for="demo-human">Not a robot</label>
-							</div>
-							<div class="field">
-								<label for="demo-message">Message</label>
-								<textarea name="demo-message" id="demo-message" placeholder="Enter your message"
-									rows="6"></textarea>
-							</div>
-						</div>
-						<ul class="actions">
-							<li><input type="submit" value="Send Message" class="primary" /></li>
-							<li><input type="reset" value="Reset" /></li>
-						</ul>
-					</form>
-				</section>
-
-			</article>
-
 		</div>
+		<div class="sidebar-bottom">
+			UNC Chapel Hill<br>
+			Department of Physics &amp; Astronomy
+		</div>
+	</aside>
 
-		<!-- Footer -->
-		<footer id="footer">
-			<p class="copyright">&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+	<!-- Main -->
+	<main id="main">
+
+		<!-- About -->
+		<section class="section" id="about">
+			<div class="section-label">01 — About</div>
+			<h2 class="section-title">Welcome.</h2>
+			<div class="about-grid">
+				<div>
+					<p>My name is Brian Cook; I am working on my PhD in astrophysics at the University of North Carolina at Chapel Hill. Generally speaking, I am interested in dense star clusters, Galactic archaeology, and near-field cosmology.</p>
+					<p>Before coming to Carolina, I received my BS in astrophysics from the University of Michigan and my MSc in astronomy from the Sterrewacht in Leiden. You can learn more about my research interests elsewhere on this site.</p>
+				</div>
+				<div>
+					<div class="portrait-wrap">
+						<img src="images/IMG_6341.jpg" alt="Brian T. Cook" />
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Research -->
+		<section class="section" id="research">
+			<div class="section-label">02 — Research</div>
+			<h2 class="section-title">Interests.</h2>
+
+			<div class="research-items">
+				<div class="research-item">
+					<div class="research-num">001</div>
+					<h3><i>N</i>-body Solvers &amp; Star Clusters</h3>
+					<p>There are a variety of ways to simulate self-gravitating systems, and globular clusters push the boundaries of what can be done computationally. Brute-force, <i>O(N<sup>2</sup>)</i> approaches take many months to complete on a supercomputer due to the dramatically varying spatiotemporal scales present in the resolution of the underlying dynamics.</p>
+					<p>I led the development of <b>KRIOS</b> (<a href="https://iopscience.iop.org/article/10.3847/1538-4357/ae0478">first code paper here</a>), a new basis-expansion <i>N</i>-body code specifically designed for modeling globular clusters where the spherical symmetry might be broken (e.g., rotation or tides). KRIOS can act as an intermediary between direct <i>N</i>-body and particle-spray codes for the modeling of stellar streams as well; the paper detailing our findings has been submitted to ApJ and <a href="https://arxiv.org/abs/2602.13385">a preprint is available on the arXiv</a>.</p>
+				</div>
+
+				<div class="research-item">
+					<div class="research-num">002</div>
+					<h3>Galactic Archaeology</h3>
+					<p>Galactic archaeology is the branch of research devoted to determining the formation history of the Milky Way. Galaxies form in what is known as a hierarchical process; smaller galaxies are accreted by larger galaxies, which in turn causes the larger one to grow. As the smaller galaxy is tidally stripped, it leaves behind signatures in the form of objects like stellar streams and globular clusters.</p>
+					<p>As a summer intern at MIT Lincoln Lab, I developed a routine for identifying substructure in the Milky Way comprised of RR Lyrae variables, a popular standard candle in this context, based on hierarchical clustering. You can learn more about our results in <a href="https://academic.oup.com/mnras/article/513/2/2509/6571255">Cook et al. (2022)</a>. I have been expanding on this effort with the new Gaia DR3 release with an eye towards a more general identification routine for forthcoming surveys.</p>
+				</div>
+
+				<div class="research-item">
+					<div class="research-num">003</div>
+					<h3>Near-field Cosmology</h3>
+					<p>It is theorized that during a period of rapid inflation after the Big Bang, small quantum fluctuations were forced onto macroscopic scales. Cosmologists can use observations of the cosmic microwave background to map these overdense anisotropies in the Universe, in addition to determining the abundances of things like baryonic matter and dark energy. With this set of initial conditions, a wide set of cosmological simulations have been developed.</p>
+					<p>These simulation suites are comprised of state-of-the-art algorithms that treat astrophysical phenomena operating on different length and time scales simultaneously. The outputs can then be analyzed to test the effects of underlying physics theories (e.g., AGN feedback, small-scale DM distribution) on observables.</p>
+					<p>During my first year in Leiden, I analyzed low-mass, star-forming galaxies produced by the <a href="http://eagle.strw.leidenuniv.nl/">EAGLE simulations</a>. My <a href="btcook_first_master_project.pdf">first project</a> presents an analysis of the circumgalactic medium (CGM) of these galaxies; often defined as the material gravitationally bound to the galaxy but outside of the disk, the CGM is critical to understanding galaxy formation and evolution.</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- CV -->
+		<section class="section" id="cv">
+			<div class="section-label">03 — CV</div>
+			<h2 class="section-title">Curriculum<br>Vitae.</h2>
+			<p>Full academic curriculum vitae available for download.</p>
+			<a href="btcook_cv.pdf" class="cv-link-wrap">
+				<span>Download CV</span>
+				<span class="cv-arrow">↗</span>
+			</a>
+		</section>
+
+		<!-- Contact -->
+		<section class="section" id="contact">
+			<div class="section-label">04 — Contact</div>
+			<h2 class="section-title">Get in<br>Touch.</h2>
+			<a href="mailto:btcook@unc.edu" class="contact-email">btcook@unc.edu</a>
+			<p style="margin-top:2rem; margin-bottom:1.25rem; font-family: var(--font-mono); font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-dim);">Links</p>
+			<div class="links-row">
+				<a href="https://www.linkedin.com/in/brian-c-36267087/" class="link-chip">LinkedIn</a>
+				<a href="https://github.com/briantcook" class="link-chip">GitHub</a>
+				<a href="https://scholar.google.com/citations?user=ixSSy6sAAAAJ&hl=en" class="link-chip">Google Scholar</a>
+			</div>
+		</section>
+
+		<footer>
+			<p>&copy; Brian T. Cook &mdash; Design adapted from <a href="https://html5up.net">HTML5 UP</a>.</p>
 		</footer>
 
-	</div>
+	</main>
+</div>
 
-	<!-- BG -->
-	<div id="bg"></div>
+<script>
+	// ── Starfield ──
+	const canvas = document.getElementById('starfield');
+	const ctx = canvas.getContext('2d');
+	let stars = [];
 
-	<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
+	function resize() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	}
 
+	function initStars() {
+		stars = [];
+		const count = Math.floor((canvas.width * canvas.height) / 4000);
+		for (let i = 0; i < count; i++) {
+			stars.push({
+				x: Math.random() * canvas.width,
+				y: Math.random() * canvas.height,
+				r: Math.random() * 1.2,
+				a: Math.random(),
+				speed: 0.0002 + Math.random() * 0.0004,
+				phase: Math.random() * Math.PI * 2
+			});
+		}
+	}
+
+	let t = 0;
+	function draw() {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		t += 0.5;
+		for (const s of stars) {
+			const alpha = s.a * (0.4 + 0.6 * Math.sin(t * s.speed * 100 + s.phase));
+			ctx.beginPath();
+			ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+			ctx.fillStyle = `rgba(180, 200, 240, ${alpha})`;
+			ctx.fill();
+		}
+		requestAnimationFrame(draw);
+	}
+
+	resize();
+	initStars();
+	draw();
+	window.addEventListener('resize', () => { resize(); initStars(); });
+
+	// ── Scroll reveal ──
+	const sections = document.querySelectorAll('.section');
+	const observer = new IntersectionObserver(entries => {
+		entries.forEach(e => {
+			if (e.isIntersecting) e.target.classList.add('visible');
+		});
+	}, { threshold: 0.08 });
+	sections.forEach(s => observer.observe(s));
+
+	// ── Active nav link ──
+	const navLinks = document.querySelectorAll('nav a');
+	const sectionObserver = new IntersectionObserver(entries => {
+		entries.forEach(e => {
+			if (e.isIntersecting) {
+				navLinks.forEach(l => l.classList.remove('active'));
+				const link = document.querySelector(`nav a[href="#${e.target.id}"]`);
+				if (link) link.classList.add('active');
+			}
+		});
+	}, { threshold: 0.4 });
+	sections.forEach(s => sectionObserver.observe(s));
+</script>
 </body>
-
 </html>
